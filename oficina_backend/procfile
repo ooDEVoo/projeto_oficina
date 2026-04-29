@@ -1,0 +1,1 @@
+web: gunicorn oficina_backend.wsgi
