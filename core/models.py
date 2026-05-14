@@ -17,13 +17,23 @@ class Veiculo(models.Model):
         on_delete=models.CASCADE,
         related_name='veiculos'
     )
+
     placa = models.CharField(max_length=20)
     marca = models.CharField(max_length=100)
     modelo = models.CharField(max_length=100)
+
     ano = models.CharField(max_length=10, blank=True, null=True)
     cor = models.CharField(max_length=50, blank=True, null=True)
+
     quilometragem = models.CharField(max_length=50, blank=True, null=True)
+
     observacoes = models.TextField(blank=True, null=True)
+
+    foto = models.ImageField(
+        upload_to='veiculos/',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f'{self.marca} {self.modelo} - {self.placa}'
