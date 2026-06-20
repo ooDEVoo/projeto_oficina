@@ -69,21 +69,25 @@ class AgendamentoSerializer(serializers.ModelSerializer):
 
 
 class OrcamentoSerializer(serializers.ModelSerializer):
-    cliente_nome = serializers.CharField(
-        source='cliente.nome',
-        read_only=True
-    )
-
+    cliente_nome = serializers.SerializerMethodField()
     veiculo_nome = serializers.SerializerMethodField()
-
-    veiculo_placa = serializers.CharField(
-        source='veiculo.placa',
-        read_only=True
-    )
+    veiculo_placa = serializers.SerializerMethodField()
 
     class Meta:
         model = Orcamento
         fields = '__all__'
 
+    def get_cliente_nome(self, obj):
+        if obj.cliente:
+            return obj.cliente.nome
+        return ''
+
     def get_veiculo_nome(self, obj):
-        return f'{obj.veiculo.marca} {obj.veiculo.modelo}'
+        if obj.veiculo:
+            return f'{obj.veiculo.marca} {obj.veiculo.modelo}'
+        return ''
+
+    def get_veiculo_placa(self, obj):
+        if obj.veiculo:
+            return obj.veiculo.placa
+        return ''
