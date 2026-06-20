@@ -78,9 +78,7 @@ class OrcamentoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_cliente_nome(self, obj):
-        if obj.cliente:
-            return obj.cliente.nome
-        return ''
+        return obj.cliente.nome if obj.cliente else ''
 
     def get_veiculo_nome(self, obj):
         if obj.veiculo:
@@ -88,6 +86,4 @@ class OrcamentoSerializer(serializers.ModelSerializer):
         return ''
 
     def get_veiculo_placa(self, obj):
-        if obj.veiculo:
-            return obj.veiculo.placa
-        return ''
+        return obj.veiculo.placa if obj.veiculo else ''
