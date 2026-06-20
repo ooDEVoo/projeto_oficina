@@ -46,5 +46,7 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
     
 
 class OrcamentoViewSet(viewsets.ModelViewSet):
-    queryset = Orcamento.objects.all().order_by('-id')
-    serializer_class = OrcamentoSerializer    
+    serializer_class = OrcamentoSerializer
+
+    def get_queryset(self):
+        return Orcamento.objects.all().order_by('-id') 
