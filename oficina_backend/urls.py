@@ -5,20 +5,66 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from core.views import ClienteViewSet, VeiculoViewSet, OrdemServicoViewSet
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+from core.views import (
+    ClienteViewSet,
+    VeiculoViewSet,
+    OrdemServicoViewSet,
+    AgendamentoViewSet,
+    OrcamentoViewSet,
+)
 
 router = DefaultRouter()
-router.register(r'clientes', ClienteViewSet, basename='clientes')
-router.register(r'veiculos', VeiculoViewSet, basename='veiculos')
-router.register(r'ordens', OrdemServicoViewSet, basename='ordens')
+
+router.register(
+    r'clientes',
+    ClienteViewSet,
+    basename='clientes',
+)
+
+router.register(
+    r'veiculos',
+    VeiculoViewSet,
+    basename='veiculos',
+)
+
+router.register(
+    r'ordens',
+    OrdemServicoViewSet,
+    basename='ordens',
+)
+
+router.register(
+    r'agendamentos',
+    AgendamentoViewSet,
+    basename='agendamentos',
+)
+
+router.register(
+    r'orcamentos',
+    OrcamentoViewSet,
+    basename='orcamentos',
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path(
+        'api/login/',
+        TokenObtainPairView.as_view(),
+        name='token_obtain_pair',
+    ),
+
+    path(
+        'api/token/refresh/',
+        TokenRefreshView.as_view(),
+        name='token_refresh',
+    ),
 
     path('api/', include(router.urls)),
 

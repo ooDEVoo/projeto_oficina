@@ -24,9 +24,7 @@ class Veiculo(models.Model):
 
     ano = models.CharField(max_length=10, blank=True, null=True)
     cor = models.CharField(max_length=50, blank=True, null=True)
-
     quilometragem = models.CharField(max_length=50, blank=True, null=True)
-
     observacoes = models.TextField(blank=True, null=True)
 
     foto = models.ImageField(
@@ -53,23 +51,177 @@ class OrdemServico(models.Model):
         on_delete=models.CASCADE,
         related_name='ordens'
     )
+
     veiculo = models.ForeignKey(
         Veiculo,
         on_delete=models.CASCADE,
         related_name='ordens'
     )
+
     descricao_problema = models.TextField()
-    servico_realizado = models.TextField(blank=True, null=True)
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    servico_realizado = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    valor_pecas = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    valor_mao_obra = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    valor_total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    lucro = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='Aguardando'
     )
+
     data_entrada = models.CharField(max_length=20)
-    data_previsao = models.CharField(max_length=20, blank=True, null=True)
-    data_entrega = models.CharField(max_length=20, blank=True, null=True)
-    observacoes = models.TextField(blank=True, null=True)
+
+    data_previsao = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    data_entrega = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    observacoes = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    foto = models.ImageField(
+        upload_to='ordens/',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f'OS #{self.id} - {self.cliente.nome}'
+
+
+class Agendamento(models.Model):
+    STATUS_CHOICES = [
+        ('Agendado', 'Agendado'),
+        ('Confirmado', 'Confirmado'),
+        ('Em andamento', 'Em andamento'),
+        ('Concluído', 'Concluído'),
+        ('Cancelado', 'Cancelado'),
+    ]
+
+    cliente = models.ForeignKey(
+        Cliente,
+        on_delete=models.CASCADE,
+        related_name='agendamentos'
+    )
+
+    veiculo = models.ForeignKey(
+        Veiculo,
+        on_delete=models.CASCADE,
+        related_name='agendamentos'
+    )
+
+    data = models.CharField(max_length=20)
+
+    hora = models.CharField(max_length=10)
+
+    descricao = models.TextField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='Agendado'
+    )
+
+    observacoes = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return (
+            f'Agendamento #{self.id} - '
+            f'{self.cliente.nome} - '
+            f'{self.data} {self.hora}'
+        )
+
+
+class Orcamento(models.Model):
+    STATUS_CHOICES = [
+        ('Pendente', 'Pendente'),
+        ('Aprovado', 'Aprovado'),
+        ('Reprovado', 'Reprovado'),
+        ('Convertido', 'Convertido'),
+    ]
+
+    cliente = models.ForeignKey(
+        Cliente,
+        on_delete=models.CASCADE,
+        related_name='orcamentos'
+    )
+
+    veiculo = models.ForeignKey(
+        Veiculo,
+        on_delete=models.CASCADE,
+        related_name='orcamentos'
+    )
+
+    descricao = models.TextField()
+
+    valor_pecas = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    valor_mao_obra = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    valor_total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    observacoes = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='Pendente'
+    )
+
+    data_criacao = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'Orçamento #{self.id} - {self.cliente.nome}'
